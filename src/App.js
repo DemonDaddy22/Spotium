@@ -14,9 +14,8 @@ const AppContainer = styled.div`
     flex-direction: column;
     gap: 1rem;
     justify-content: center;
-    min-height: 100vh;
-    overflow-x: hidden;
-    overflow-y: auto;
+    height: 100vh;
+    overflow: hidden;
     padding: 1rem;
 `;
 
