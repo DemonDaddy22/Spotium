@@ -11,9 +11,8 @@ const spotifyApi = new SpotifyWebApi({
 const DashboardContainer = styled.div`
     display: flex;
     flex-direction: column;
-    flex: 1;
     gap: 1rem;
-    height: 100%;
+    height: calc(100vh - 40px);
     padding: 1rem;
     width: 100%;
 
@@ -39,7 +38,6 @@ const DashboardContainer = styled.div`
 
     .content {
         flex: 1;
-        height: 100%;
         overflow-y: auto;
     }
 `;

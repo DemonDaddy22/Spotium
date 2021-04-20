@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const TrackRow = styled.div`
     align-items: center;
+    cursor: pointer;
     display: flex;
     margin: 0.5rem 0;
 
@@ -25,7 +26,7 @@ const TrackRow = styled.div`
     }
 `;
 
-const Track = ({ track }) => <TrackRow>
+const Track = ({ track, playTrack }) => <TrackRow onClick={() => playTrack(track)}>
     <img src={track.albumImage} alt={track.title} />
     <div className='track-info'>
         <div className='track-title'>{track.title}</div>
