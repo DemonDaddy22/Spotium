@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import useAuth from '../hooks/useAuth';
 import SpotifyWebApi from 'spotify-web-api-node';
 import Track from './Track';
+import Player from './Player';
 
 const spotifyApi = new SpotifyWebApi({
     clientId: '8d68b455cea241e1a1fd770c8dde2714',
@@ -46,6 +47,7 @@ const Dashboard = ({ code }) => {
     const accessToken = useAuth(code);
     const [search, setSearch] = useState('');
     const [searchResults, setSearchResults] = useState([]);
+    const [playingTrack, setPlayingTrack] = useState();
 
     useEffect(() => {
         if (!accessToken) return;
@@ -81,6 +83,11 @@ const Dashboard = ({ code }) => {
         return () => (cancelRequest = true);
     }, [search, accessToken]);
 
+    const playTrack = (track) => {
+        setPlayingTrack(track);
+        setSearch('');
+    };
+
     return (
         <DashboardContainer>
             <input
@@ -90,8 +97,11 @@ const Dashboard = ({ code }) => {
                 onChange={(e) => setSearch(e.target.value)}
             ></input>
             <div className='content'>
-                {searchResults.map((track, index) => <Track key={`track-${index}`} track={track} />)}
+                {searchResults.map((track, index) => (
+                    <Track key={`track-${index}`} track={track} playTrack={playTrack} />
+                ))}
             </div>
+            <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
         </DashboardContainer>
     );
 };
