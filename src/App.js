@@ -15,7 +15,6 @@ const AppContainer = styled.div`
     gap: 1rem;
     height: 100vh;
     overflow: hidden;
-    padding: 1rem;
 `;
 
 const App = () => <AppContainer>

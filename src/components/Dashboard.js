@@ -4,6 +4,7 @@ import useAuth from '../hooks/useAuth';
 import SpotifyWebApi from 'spotify-web-api-node';
 import Track from './Track';
 import Player from './Player';
+import axios from 'axios';
 
 const spotifyApi = new SpotifyWebApi({
     clientId: '8d68b455cea241e1a1fd770c8dde2714',
@@ -13,8 +14,7 @@ const DashboardContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    height: calc(100vh - 40px);
-    padding: 1rem;
+    height: calc(100vh - 114px);
     width: 100%;
 
     input[type='text'] {
@@ -23,6 +23,7 @@ const DashboardContainer = styled.div`
         border-radius: 6px;
         color: #1db954;
         font-size: 1.5rem;
+        margin: 0 1rem;
         outline: none;
         padding: 0.75rem 1rem;
         transition: border 0.2s ease;
@@ -39,7 +40,15 @@ const DashboardContainer = styled.div`
 
     .content {
         flex: 1;
+        margin: 0 1rem;
         overflow-y: auto;
+    }
+
+    .lyrics {
+        color: #F7F7F7;
+        font-size: 1.2rem;
+        text-align: center;
+        white-space: pre;
     }
 `;
 
@@ -48,6 +57,7 @@ const Dashboard = ({ code }) => {
     const [search, setSearch] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [playingTrack, setPlayingTrack] = useState();
+    const [lyrics, setLyrics] = useState('');
 
     useEffect(() => {
         if (!accessToken) return;
@@ -83,9 +93,23 @@ const Dashboard = ({ code }) => {
         return () => (cancelRequest = true);
     }, [search, accessToken]);
 
+    useEffect(() => {
+        if (!playingTrack) return;
+        axios
+            .get('http://localhost:3031/lyrics', {
+                params: {
+                    track: playingTrack.track,
+                    artist: playingTrack.artist,
+                },
+            })
+            .then((res) => setLyrics(res.data.lyrics))
+            .catch((err) => console.error(err));
+    }, [playingTrack]);
+
     const playTrack = (track) => {
         setPlayingTrack(track);
         setSearch('');
+        setLyrics('');
     };
 
     return (
@@ -97,9 +121,13 @@ const Dashboard = ({ code }) => {
                 onChange={(e) => setSearch(e.target.value)}
             ></input>
             <div className='content'>
-                {searchResults.map((track, index) => (
-                    <Track key={`track-${index}`} track={track} playTrack={playTrack} />
-                ))}
+                {searchResults.length ? (
+                    searchResults.map((track, index) => (
+                        <Track key={`track-${index}`} track={track} playTrack={playTrack} />
+                    ))
+                ) : (
+                    <div className='lyrics'>{lyrics}</div>
+                )}
             </div>
             <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
         </DashboardContainer>

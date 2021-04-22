@@ -15,6 +15,7 @@ const Player = ({ accessToken, trackUri }) => {
                 if (!state.isPlaying) setPlay(false);
             }}
             showSaveIcon
+            magnifySliderOnHover
             styles={{
                 bgColor: '#141414',
                 color: '#FFF',
