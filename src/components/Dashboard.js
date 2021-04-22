@@ -48,7 +48,7 @@ const DashboardContainer = styled.div`
         color: #F7F7F7;
         font-size: 1.2rem;
         text-align: center;
-        white-space: pre;
+        white-space: pre-wrap;
     }
 `;
 
@@ -98,7 +98,7 @@ const Dashboard = ({ code }) => {
         axios
             .get('http://localhost:3031/lyrics', {
                 params: {
-                    track: playingTrack.track,
+                    track: playingTrack.title,
                     artist: playingTrack.artist,
                 },
             })

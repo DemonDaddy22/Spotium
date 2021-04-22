@@ -11,7 +11,9 @@ const useAuth = (code) => {
             .post('http://localhost:3031/login', { code })
             .then((res) => {
                 setAccessToken(res.data.accessToken);
+                setRefreshToken(res.data.refreshToken);
                 setExpiresIn(res.data.expiresIn);
+                window.history.pushState({}, null, '/');
             })
             .catch((err) => {
                 console.error(err);
@@ -26,9 +28,7 @@ const useAuth = (code) => {
                 .post('http://localhost:3031/refresh', { refreshToken })
                 .then((res) => {
                     setAccessToken(res.data.accessToken);
-                    setRefreshToken(res.data.refreshToken);
                     setExpiresIn(res.data.expiresIn);
-                    window.history.pushState({}, null, '/');
                 })
                 .catch((err) => {
                     console.error(err);
